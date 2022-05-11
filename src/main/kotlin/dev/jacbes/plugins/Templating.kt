@@ -1,15 +1,19 @@
 package dev.jacbes.plugins
 
 import dev.jacbes.service.createPdf
-import freemarker.cache.*
+import freemarker.cache.ClassTemplateLoader
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.server.freemarker.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
+import io.ktor.server.freemarker.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 
 fun Application.configureTemplating() {
     install(FreeMarker) {
@@ -25,6 +29,13 @@ fun Application.configureTemplating() {
                 call.respond(FreeMarkerContent("index.ftl", model = null))
             }
             post {
+                val pathDir = "uploads"
+                withContext(Dispatchers.IO) {
+                    if (Files.notExists(Paths.get(pathDir))) {
+                        Files.createDirectory(Paths.get(pathDir))
+                    }
+                }
+
                 var fileName = ""
                 var outName = ""
 
