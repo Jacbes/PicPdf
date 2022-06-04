@@ -24,7 +24,6 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
     implementation("org.apache.pdfbox:pdfbox:2.0.24")
 
     implementation("com.zaxxer:HikariCP:$hikaricp_version")
