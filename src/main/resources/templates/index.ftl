@@ -5,7 +5,7 @@
 </head>
 <body>
 <div>
-    <form action="/index" method="post" enctype="multipart/form-data">
+    <form action="/" method="post" enctype="multipart/form-data">
         <p>
             <input type="file" id="image" name="image[]" accept=".jpg, .jpeg, .png" multiple>
         </p>
