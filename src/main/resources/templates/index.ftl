@@ -1,15 +1,14 @@
 <html lang="en">
 <head>
     <title>PicToPdf</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 <div>
     <form action="/" method="post" enctype="multipart/form-data">
         <p>
-            <input type="file" id="image" name="image[]" accept=".jpg, .jpeg, .png" multiple>
+            <input type="file" id="image" accept=".jpg, .jpeg, .png" multiple>
         </p>
-        <div id="frames"></div>
+        <div id="preview"></div>
         <p>
             <input type="text" name="outName">
         </p>
@@ -19,13 +18,21 @@
     </form>
 </div>
 <script>
-    $(document).ready(function () {
-        $('#image').change(function () {
-            for (let i = 0; i < $(this)[0].files.length; i++) {
-                $('#frames').append('<img src="' + window.URL.createObjectURL(this.files[i]) + '" width="100px" height="100px"/>');
-            }
-        });
-    });
+    const preview = document.getElementById("preview");
+    const input_files = document.getElementById("image");
+
+    input_files.addEventListener("change", addPreview, false);
+
+    function addPreview() {
+        this.innerHTML = "";
+        for (let i = 0; this.files.length > i; i++) {
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(this.files[i]);
+            img.width = 100
+            img.height = 100
+            preview.appendChild(img);
+        }
+    }
 </script>
 </body>
 </html>
