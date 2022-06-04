@@ -6,7 +6,7 @@
 <div>
     <form action="/" method="post" enctype="multipart/form-data">
         <p>
-            <input type="file" id="image" accept=".jpg, .jpeg, .png" multiple>
+            <input type="file" id="image" name="image[]" accept=".jpg, .jpeg, .png" multiple>
         </p>
         <div id="preview"></div>
         <p>
@@ -24,7 +24,7 @@
     input_files.addEventListener("change", addPreview, false);
 
     function addPreview() {
-        this.innerHTML = "";
+        preview.innerHTML = "";
         for (let i = 0; this.files.length > i; i++) {
             const img = document.createElement("img");
             img.src = URL.createObjectURL(this.files[i]);
