@@ -14,11 +14,9 @@
 
         <div class="row mb-2 justify-content-center">
             <div class="col-auto">
-                <label for="image">
-                    <a class="btn btn-outline-secondary" role="button">
-                        Выберите файлы JPG
-                    </a>
-                </label>
+                <a class="btn btn-outline-secondary" onclick="addFiles()">
+                    Выберите файлы JPG
+                </a>
                 <input class="invisible" type="file" id="image" name="image[]" accept=".jpg, .jpeg, .png" multiple>
                 <a class="btn btn-outline-secondary" role="button" onclick="clearList()">
                     Удалить файлы
@@ -37,23 +35,39 @@
 
         <div class="row mb-2 justify-content-center">
             <div class="col-auto">
-                <button class="btn btn-primary" onclick="sendRequest()">
+                <a class="btn btn-primary" onclick="sendRequest()">
                     Конвертировать
-                </button>
+                </a>
             </div>
         </div>
     </form>
+    <p class="invisible fs-2 text-center" id="attention">
+        Максимум 20 файлов
+    </p>
+    <p class="invisible fs-2 text-center" id="nonFiles">
+        Не выбраны файлы
+    </p>
 </div>
 <script>
+    const max_document = 20
     const preview = document.getElementById("preview");
     const input_files = document.getElementById("image");
+    const attent = document.getElementById("attention")
+    const nonFil = document.getElementById("nonFiles")
+    const but = document.getElementById("forrm");
     const dataTransfer = new DataTransfer()
+    const invAttent = "invisible fs-2 text-center"
+    const visAttent = "visible fs-2 text-center"
 
     input_files.addEventListener("change", addPreview, false);
 
     function addPreview() {
         for (let i = 0; this.files.length > i; i++) {
             dataTransfer.items.add(this.files[i]);
+            if (dataTransfer.items.length >= max_document) {
+                showAttention()
+                break
+            }
         }
         this.files = dataTransfer.files;
         refreshPreview();
@@ -81,6 +95,7 @@
     }
 
     function removeItem() {
+        closeAttention()
         for (let i = 0; dataTransfer.files.length > i; i++) {
             if (i == this.id) {
                 dataTransfer.items.remove(i)
@@ -91,14 +106,41 @@
     }
 
     function clearList() {
+        closeAttention()
         dataTransfer.items.clear()
         refreshPreview()
     }
 
     function sendRequest() {
-        input_files.files = dataTransfer.files
-        let but = document.getElementById("forrm");
-        but.submit()
+        if (dataTransfer.files.length > 0) {
+            closeAttention()
+            input_files.files = dataTransfer.files
+            but.submit()
+        } else {
+            showZeroFiles()
+        }
+    }
+
+    function addFiles() {
+        if (dataTransfer.files.length < max_document) {
+            closeAttention()
+            input_files.click()
+        } else {
+            showAttention()
+        }
+    }
+
+    function showAttention() {
+        attent.className = visAttent
+    }
+
+    function showZeroFiles() {
+        nonFil.className = visAttent
+    }
+
+    function closeAttention() {
+        attent.className = invAttent
+        nonFil.className = invAttent
     }
 </script>
 </body>
