@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="container">
-    <form action="/" method="post" enctype="multipart/form-data">
+    <form action="/" method="post" enctype="multipart/form-data" id="forrm">
 
         <div class="row mb-2 justify-content-center">
             <div class="col-auto">
@@ -20,12 +20,13 @@
                     </a>
                 </label>
                 <input class="invisible" type="file" id="image" name="image[]" accept=".jpg, .jpeg, .png" multiple>
+                <a class="btn btn-outline-secondary" role="button" onclick="clearList()">
+                    Удалить файлы
+                </a>
             </div>
         </div>
 
-        <div class="row justify-content-center">
-            <div id="preview">
-            </div>
+        <div class="row justify-content-center" id="preview">
         </div>
 
         <div class="row mb-2 justify-content-center">
@@ -36,15 +37,12 @@
 
         <div class="row mb-2 justify-content-center">
             <div class="col-auto">
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-primary" onclick="sendRequest()">
                     Конвертировать
                 </button>
             </div>
         </div>
     </form>
-    <button onclick="removeFirst()">
-        <img src="/images/x-circle.svg">
-    </button>
 </div>
 <script>
     const preview = document.getElementById("preview");
@@ -64,17 +62,43 @@
     function refreshPreview() {
         preview.innerHTML = "";
         for (let i = 0; dataTransfer.files.length > i; i++) {
+            const divev = document.createElement("div");
             const img = document.createElement("img");
+            const delette = document.createElement("img")
             img.src = URL.createObjectURL(dataTransfer.files[i]);
             img.width = 200;
             img.height = 200;
+            delette.id = i;
+            divev.id = "img" + i;
+            divev.className = "col-2"
             img.className = "img-thumbnail mb-2";
-            preview.appendChild(img);
+            delette.addEventListener("click", removeItem, false)
+            delette.src = "/images/x-circle.svg"
+            divev.appendChild(delette)
+            divev.appendChild(img)
+            preview.appendChild(divev);
         }
     }
 
-    function removeFirst() {
-        console.log(dataTransfer.files)
+    function removeItem() {
+        for (let i = 0; dataTransfer.files.length > i; i++) {
+            if (i == this.id) {
+                dataTransfer.items.remove(i)
+                break
+            }
+        }
+        refreshPreview()
+    }
+
+    function clearList() {
+        dataTransfer.items.clear()
+        refreshPreview()
+    }
+
+    function sendRequest() {
+        input_files.files = dataTransfer.files
+        let but = document.getElementById("forrm");
+        but.submit()
     }
 </script>
 </body>
