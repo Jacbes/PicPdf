@@ -12,49 +12,69 @@
 <div class="container">
     <form action="/" method="post" enctype="multipart/form-data">
 
-        <div class="row mb-2 justify-content-md-center">
+        <div class="row mb-2 justify-content-center">
             <div class="col-auto">
-                <label for="formFileMultiple" class="form-label">Выберите файлы JPG</label>
-                <input class="form-control" type="file" id="image" name="image[]" accept=".jpg, .jpeg, .png" multiple>
+                <label for="image">
+                    <a class="btn btn-outline-secondary" role="button">
+                        Выберите файлы JPG
+                    </a>
+                </label>
+                <input class="invisible" type="file" id="image" name="image[]" accept=".jpg, .jpeg, .png" multiple>
             </div>
         </div>
 
-        <div class="row justify-content-md-center">
-            <div id="preview"></div>
+        <div class="row justify-content-center">
+            <div id="preview">
+            </div>
         </div>
 
-        <div class="row mb-2 justify-content-md-center">
+        <div class="row mb-2 justify-content-center">
             <div class="col-auto">
                 <input class="form-control" type="text" name="outName" placeholder="Название файла PDF">
             </div>
         </div>
 
-        <div class="row mb-2 justify-content-md-center">
+        <div class="row mb-2 justify-content-center">
             <div class="col-auto">
-                <button class="btn btn-primary" type="submit">Конвертировать</button>
+                <button class="btn btn-primary" type="submit">
+                    Конвертировать
+                </button>
             </div>
         </div>
     </form>
-<#--    <button>-->
-<#--        <img src="/images/x-circle.svg">-->
-<#--    </button>-->
+    <button onclick="removeFirst()">
+        <img src="/images/x-circle.svg">
+    </button>
 </div>
 <script>
     const preview = document.getElementById("preview");
     const input_files = document.getElementById("image");
+    const dataTransfer = new DataTransfer()
 
     input_files.addEventListener("change", addPreview, false);
 
     function addPreview() {
-        preview.innerHTML = "";
         for (let i = 0; this.files.length > i; i++) {
+            dataTransfer.items.add(this.files[i]);
+        }
+        this.files = dataTransfer.files;
+        refreshPreview();
+    }
+
+    function refreshPreview() {
+        preview.innerHTML = "";
+        for (let i = 0; dataTransfer.files.length > i; i++) {
             const img = document.createElement("img");
-            img.src = URL.createObjectURL(this.files[i]);
+            img.src = URL.createObjectURL(dataTransfer.files[i]);
             img.width = 200;
             img.height = 200;
             img.className = "img-thumbnail mb-2";
             preview.appendChild(img);
         }
+    }
+
+    function removeFirst() {
+        console.log(dataTransfer.files)
     }
 </script>
 </body>
