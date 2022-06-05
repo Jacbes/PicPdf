@@ -5,10 +5,13 @@ import io.ktor.server.routing.*
 
 fun Route.getStatic() {
     static("/") {
-        staticBasePackage = "icons"
+        staticBasePackage = "static"
         static("images") {
             resource("favicon.ico")
             resource("x-circle.svg")
+        }
+        static("scripts") {
+            resource("script.js")
         }
     }
 }
